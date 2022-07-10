@@ -1,84 +1,105 @@
-function findIntersectionSetImpl(list1, list2) {
-  const list1Elements = generateElementsSet(list1);
-  let list1HasIntersection = hasIntersection(list2, list1Elements);
-  if (list1HasIntersection) {
-    const elementsList = [...list1Elements];
-    return elementsList[elementsList.length - 1];
-  }
-  let list2Elements = generateElementsSet(list2);
-  let list2HasIntersection = hasIntersection(list1, list2Elements);
-  if (list2HasIntersection) {
-    const elementsList = [...list2Elements];
-    return elementsList[elementsList.length - 1];
+import { getLength, arrayToList } from "./utils.js";
+
+function findIntersection(head1, head2) {
+  if (hasIntersection(head1, head2)) {
+    const length1 = getLength(head1);
+    const length2 = getLength(head2);
+    const diff = length1 - length2;
+    if (diff >= 0) {
+      return findIntersectingNode(advanceList(head1, diff), head2);
+    }
+    return findIntersectingNode(head1, advanceList(head2, Math.abs(diff)));
   }
   return null;
 }
 
-function hasIntersection(list, elementsSet) {
-  let listHasIntersection = false;
-  for (let node = list; node !== null; node = node.next) {
-    if (elementsSet.has(node)) {
-      listHasIntersection = true;
-      elementsSet.delete(node);
-    } else {
-      elementsSet.add(node);
+function findIntersectingNode(head1, head2) {
+  let node1 = head1;
+  let node2 = head2;
+  while (node1 !== null && node2 !== null) {
+    if (node1 === node2) {
+      return node1;
     }
+    node1 = node1.next;
+    node2 = node2.next;
   }
-  return listHasIntersection;
+  throw new Error("List sizes are not equal.");
 }
 
-function generateElementsSet(list) {
-  const elements = new Set();
-  let lastNode = null;
-  for (let node = list; node !== null; node = node.next) {
-    elements.add(node);
+function advanceList(head, distance) {
+  let counter = distance;
+  let node = head;
+  while (counter > 0) {
+    node = node.next;
+    --counter;
   }
-  return elements;
+  return node;
 }
 
-function findIntersectionIterativeImpl(list1, list2) {
-  return (
-    findIntersectingNode(list1, list2) || findIntersectingNode(list2, list1)
-  );
+function hasIntersection(head1, head2) {
+  return getFinalNodeOfList(head1) === getFinalNodeOfList(head2);
 }
 
-function findIntersectingNode(list1, list2) {
-  let previous = null;
-  for (let i = list1; i !== null; i = i.next) {
-    for (let j = list2; j !== null; j = j.next) {
-      if (i === j) {
-        return previous;
-      }
-    }
-    previous = i;
+function getFinalNodeOfList(head) {
+  let finalNode = null;
+  for (let node = head; node !== null; node = node.next) {
+    finalNode = node;
   }
-  return null;
+  return finalNode;
 }
 
-const myOtherList = {
-  data: 1,
-  next: { data: 2, next: { data: 3, next: null } },
-};
-const anotherIntersectingNode = {
-  data: 10000,
-  next: myOtherList,
-};
-const intersectingNode = {
+const listIntersection = {
   data: 5000,
-  next: anotherIntersectingNode,
+  next: {
+    data: 50,
+    next: { data: 123, next: null },
+  },
 };
 
 const myList = {
   data: 1,
   next: {
     data: 2,
-    next: { data: 3, next: { data: 1000, next: null } },
+    next: { data: 3, next: listIntersection },
   },
 };
 
-console.log(findIntersectionSetImpl(myList, myOtherList));
-console.log(findIntersectionSetImpl(myOtherList, intersectingNode));
-console.log(findIntersectionSetImpl(intersectingNode, myOtherList));
-console.log(findIntersectionIterativeImpl(myList, myOtherList));
-console.log(findIntersectionIterativeImpl(myOtherList, intersectingNode));
-console.log(findIntersectionSetImpl(intersectingNode, myOtherList));
+const myList2 = {
+  data: 12,
+  next: {
+    data: 13,
+    next: { data: 14, next: listIntersection },
+  },
+};
+
+const myList3 = {
+  data: 13,
+  next: { data: 14, next: listIntersection },
+};
+
+const myList4 = {
+  data: 12,
+  next: {
+    data: 13,
+    next: { data: 14, next: { data: 543, next: listIntersection } },
+  },
+};
+
+const myList5 = {
+  data: 13,
+  next: { data: 14, next: null },
+};
+
+const myList6 = {
+  data: 1456,
+  next: myList5,
+};
+
+console.log(findIntersection(myList, myList2));
+console.log(findIntersection(myList3, myList4));
+console.log(findIntersection(myList4, myList3));
+console.log(
+  findIntersection(arrayToList([1, 3, 4, 5]), arrayToList([8, 9, 10, 12]))
+);
+console.log(findIntersection(myList5, myList6));
+console.log(findIntersection(myList6, myList6));
