@@ -89,16 +89,16 @@ myStack.push(1, 11);
 myStack.push(1, 12);
 myStack.push(1, 13);
 
-console.log(myStack.pop(0)); // should be 2
-console.log(myStack.pop(0)); // should be 1
-console.log(myStack.pop(2)); // should be 13
-console.log(myStack.pop(2)); // should be 12
-console.log(myStack.pop(2)); // should be 10
-console.log(myStack.pop(2)); // should be 10
-console.log(myStack.pop(2)); // should be 10
-console.log(myStack.pop(2)); // should be 10
-console.log(myStack.pop(2)); // should be 9
-console.log(myStack.pop(2)); // should be 7
-console.log(myStack.pop(1)); // should be 13
-console.log(myStack.pop(1)); // should be 12
-console.log(myStack.pop(1)); // should be 11
+console.log(myStack.pop(0) == 2);
+console.log(myStack.pop(0) == 1);
+console.log(myStack.pop(2) == 13);
+console.log(myStack.pop(2) == 12);
+console.log(myStack.pop(2) == 10);
+console.log(myStack.pop(2) == 10);
+console.log(myStack.pop(2) == 10);
+console.log(myStack.pop(2) == 10);
+console.log(myStack.pop(2) == 9);
+console.log(myStack.pop(2) == 7);
+console.log(myStack.pop(1) == 13);
+console.log(myStack.pop(1) == 12);
+console.log(myStack.pop(1) == 11);
