@@ -1,26 +1,21 @@
 class MinStack {
   constructor() {
     this.stack = [];
-    this.min = null;
   }
 
   push(value) {
-    let previousMin = this.min;
-    if (
-      this.min === null ||
-      value < this.min
-    ) {
-      this.min = value;
+    let min = this.getMin();
+    if (this.stack.length === 0 || value < this.getMin()) {
+      min = value;
     }
-    this.stack.push({ value, previousMin });
+    this.stack.push({ value, min });
   }
 
   pop() {
     if (this.isEmpty()) {
       return null;
     }
-    const { value, previousMin } = this.stack.pop();
-    this.min = previousMin;
+    const { value } = this.stack.pop();
     return value;
   }
 
@@ -28,11 +23,14 @@ class MinStack {
     if (this.isEmpty()) {
       return null;
     }
-    return this.stack[this.stack.length - 1];
+    return this.stack[this.stack.length - 1].value;
   }
 
   getMin() {
-    return this.min;
+    if (this.isEmpty()) {
+      return null;
+    }
+    return this.stack[this.stack.length - 1].min;
   }
 
   isEmpty() {
@@ -42,16 +40,12 @@ class MinStack {
 
 const minStack = new MinStack();
 
-minStack.push(13);
-minStack.push(123);
-minStack.push(123);
-minStack.push(12);
-minStack.push(1212354);
-minStack.push(11234234324);
+minStack.push(5);
+minStack.push(6);
+minStack.push(3);
+minStack.push(7);
 
 console.log(minStack.getMin());
-minStack.pop();
-minStack.pop();
 minStack.pop();
 minStack.pop();
 
