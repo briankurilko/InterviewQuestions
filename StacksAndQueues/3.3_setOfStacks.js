@@ -42,6 +42,7 @@ class SetOfStacks {
     const value = this.stacksArray[index].pop();
     if (this.stacksArray[index].length === 0) {
       this.stacksArray.splice(index, 1);
+      --this.currentStackIndex;
     }
     return value;
   }
@@ -62,11 +63,12 @@ stacks.push(7);
 stacks.push(7);
 
 stacks.printStacks();
-stacks.pop();
 stacks.popAt(0);
 stacks.popAt(1);
-stacks.popAt(0);
-stacks.popAt(0);
-stacks.popAt(0);
+stacks.popAt(1);
+// stacks.popAt(1);
+stacks.pop();
+stacks.pop();
+stacks.pop();
 // stacks.popAt(1);
 stacks.printStacks();
