@@ -40,13 +40,13 @@ class MinStack {
 
 const minStack = new MinStack();
 
-minStack.push(5);
-minStack.push(6);
-minStack.push(3);
-minStack.push(7);
+stacks.push(5);
+stacks.push(6);
+stacks.push(3);
+stacks.push(7);
 
-console.log(minStack.getMin());
-minStack.pop();
-minStack.pop();
+console.log(stacks.getMin());
+stacks.pop();
+stacks.pop();
 
-console.log(minStack.getMin());
+console.log(stacks.getMin());
