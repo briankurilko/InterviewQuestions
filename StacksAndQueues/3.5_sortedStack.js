@@ -46,6 +46,28 @@ class SortedStackUnoptimized {
   }
 }
 
+class SortedStackOptimized {
+  constructor() {
+    this.stack = [];
+  }
+
+  push(value) {
+    this.stack.push(value);
+  }
+
+  sortStacks() {
+    const tempStack = [];
+    if (this.stack.length !== 0) {
+      while (this.sortedStack.length !== 0) {
+        this.stack.push(this.sortedStack.pop());
+      }
+      while (this.stack.length != 0) {
+          
+      }
+    }
+  }
+}
+
 const myStack = new SortedStackUnoptimized();
 
 myStack.push(4);
