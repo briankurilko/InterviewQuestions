@@ -120,7 +120,44 @@ class SortedStackOptimized {
   }
 }
 
-const myStack = new SortedStackOptimized();
+class SortedStackBookVersion {
+  constructor() {
+    this.stack = [];
+  }
+
+  push(value) {
+    this.stack.push(value);
+    this.sortStack(this.stack);
+  }
+
+  sortStack(s) {
+    const firstElement = s[s.length - 1];
+    const r = [];
+    while (s.length !== 0) {
+      /* Insert each element in s in sorted order into r. */
+      const tmp = s.pop();
+      while (r.length !== 0 && r[r.length - 1] > tmp) {
+        s.push(r.pop());
+      }
+      
+      r.push(tmp);
+    }
+    /* Copy the elements from r back into s. */
+    while (r.length !== 0) {
+      s.push(r.pop());
+    }
+  }
+
+  pop() {
+    return this.stack.pop();
+  }
+
+  peek() {
+    return this.stack[this.stack.length - 1].value;
+  }
+}
+
+const myStack = new SortedStackBookVersion();
 
 myStack.push(4);
 myStack.push(2);
@@ -129,6 +166,8 @@ myStack.push(3);
 myStack.push(100);
 myStack.push(120);
 myStack.push(1);
+
+// myStack.printStacks();
 
 console.log(myStack.pop()); // 1
 console.log(myStack.pop()); // 2
