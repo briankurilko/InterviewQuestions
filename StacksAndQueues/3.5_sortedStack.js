@@ -48,7 +48,7 @@ class SortedStackUnoptimized {
 }
 
 class SortedStackOptimized {
-  // O(1) pop and peek, O(n^2) worst case push, but possibly O(1) push. Even if we have to sort stacks, 
+  // O(1) pop and peek, O(n^2) worst case push, but possibly O(1) push. Even if we have to sort stacks,
   // we don't necessarily sort the entire stack unless we get the biggest element we've ever received, so hopefully we
   // don't usually loop through the entire array at once.
   constructor() {
@@ -59,7 +59,7 @@ class SortedStackOptimized {
   push(value) {
     if (
       this.sortedStack.length === 0 ||
-      value < this.sortedStack[this.sortedStack.length - 1]
+      value <= this.sortedStack[this.sortedStack.length - 1].value
     ) {
       this.sortedStack.push({ value });
     } else {
@@ -78,7 +78,6 @@ class SortedStackOptimized {
       this.stack.push(this.sortedStack.pop());
     }
     if (!newValuePushedIntoSortedStack) {
-      console.log("hooray");
       this.stack.push({ value: newestValue });
     }
     while (this.stack.length !== 0) {
@@ -129,9 +128,12 @@ myStack.push(2);
 myStack.push(3);
 myStack.push(100);
 myStack.push(120);
+myStack.push(1);
 
+console.log(myStack.pop()); // 1
 console.log(myStack.pop()); // 2
 console.log(myStack.pop()); // 2
 console.log(myStack.pop()); // 3
 console.log(myStack.pop()); // 4
 console.log(myStack.pop()); // 100
+console.log(myStack.pop()); // 120
