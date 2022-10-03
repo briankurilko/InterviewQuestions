@@ -51,15 +51,21 @@ class DogAndCatQueue {
   }
 }
 
-class Cat {
+class Animal {
   constructor() {
     this.position = null;
   }
 }
 
-class Dog {
+class Cat extends Animal {
   constructor() {
-    this.position = null;
+    super();
+  }
+}
+
+class Dog extends Animal {
+  constructor() {
+    super();
   }
 }
 
