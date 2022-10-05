@@ -37,7 +37,14 @@ export class Queue {
     --this.length;
     const firstNode = this.head;
     this.head = this.head.next;
+    if (this.length === 0) {
+      this.tail = null;
+    }
     return firstNode.data;
+  }
+
+  isEmpty() {
+    return this.length === 0;
   }
 
   size() {
