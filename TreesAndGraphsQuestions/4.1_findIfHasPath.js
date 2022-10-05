@@ -1,26 +1,26 @@
 import { Graph, Node, unvisitListOfNodes } from "./Graph.js";
 import { Queue } from "../StacksAndQueuesQuestions/Queue.js";
 
-function findIfHasPathBreadthFirst(node1, node2) {
-  if (node1 === null || node2 === null) {
+function findIfHasPathBreadthFirst(start, end) {
+  if (start === null || end === null) {
     return false;
   }
-  if (node1 === node2) {
+  if (start === end) {
     return true;
   }
   const queue = new Queue();
-  node1.visited = true;
-  queue.add(node1);
+  start.visited = true;
+  queue.add(start);
 
   while (!queue.isEmpty()) {
     const r = queue.removeFirst();
-    if (r === node2) {
-      return true;
-    }
+
     for (let n of r.adjacent) {
       if (n.visited === false) {
         n.visited = true;
-        n.path = n.path.concat(r.path);
+        if (n === end) {
+          return true;
+        }
         queue.add(n);
       }
     }
@@ -28,21 +28,21 @@ function findIfHasPathBreadthFirst(node1, node2) {
   return false;
 }
 
-function findIfHasRouteDepthFirst(node1, node2) {
-  if (node1 === null || node2 === null) {
+function findIfHasRouteDepthFirst(start, end) {
+  if (start === null || end === null) {
     return false;
   }
-  if (node1 === node2) {
+  if (start === end) {
     return true;
   }
 
-  node1.visited = true;
+  start.visited = true;
   let hasRoute = false;
-  for (let n of node1.adjacent) {
+  for (let n of start.adjacent) {
     if (n.visited === false) {
-      n.path = n.path.concat(node1.path);
-      n.path.push(node1.data);
-      hasRoute = findIfHasRouteDepthFirst(n, node2);
+      n.path = n.path.concat(start.path);
+      n.path.push(start.data);
+      hasRoute = findIfHasRouteDepthFirst(n, end);
       if (hasRoute) {
         return hasRoute;
       }

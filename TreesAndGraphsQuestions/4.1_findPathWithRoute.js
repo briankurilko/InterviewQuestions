@@ -1,28 +1,28 @@
 import { Graph, Node, unvisitListOfNodes } from "./Graph.js";
 import { Queue } from "../StacksAndQueuesQuestions/Queue.js";
 
-function findRouteBetweenNodesBreadthFirst(node1, node2) {
-  if (node1 === null || node2 === null) {
+function findRouteBetweenNodesBreadthFirst(start, end) {
+  if (start === null || end === null) {
     return [];
   }
-  if (node1 === node2) {
-    return [node1.data];
+  if (start === end) {
+    return [start.data];
   }
   const queue = new Queue();
-  node1.visited = true;
-  queue.add(node1);
+  start.visited = true;
+  queue.add(start);
 
   while (!queue.isEmpty()) {
     const r = queue.removeFirst();
-    if (r === node2) {
-      r.path.push(r.data);
-      return r.path;
-    }
     for (let n of r.adjacent) {
       if (n.visited === false) {
         n.visited = true;
         n.path = n.path.concat(r.path);
         n.path.push(r.data);
+        if (n === end) {
+          n.path.push(n.data);
+          return n.path;
+        }
         queue.add(n);
       }
     }
@@ -30,22 +30,22 @@ function findRouteBetweenNodesBreadthFirst(node1, node2) {
   return [];
 }
 
-function findRouteBetweenNodesDepthFirst(node1, node2) {
-  if (node1 === null || node2 === null) {
+function findRouteBetweenNodesDepthFirst(start, end) {
+  if (start === null || end === null) {
     return [];
   }
-  if (node1 === node2) {
-    node1.path.push(node1.data);
-    return node1.path;
+  if (start === end) {
+    start.path.push(start.data);
+    return start.path;
   }
 
-  node1.visited = true;
+  start.visited = true;
   let finalPath = [];
-  for (let n of node1.adjacent) {
+  for (let n of start.adjacent) {
     if (n.visited === false) {
-      n.path = n.path.concat(node1.path);
-      n.path.push(node1.data);
-      finalPath = findRouteBetweenNodesDepthFirst(n, node2);
+      n.path = n.path.concat(start.path);
+      n.path.push(start.data);
+      finalPath = findRouteBetweenNodesDepthFirst(n, end);
       if (finalPath.length !== 0) {
         return finalPath;
       }
