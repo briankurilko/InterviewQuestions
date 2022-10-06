@@ -25,7 +25,7 @@ function createBinarySearchTreeFromSortedArray(array) {
 }
 
 // this has better space complexity - slice creates a copy of the array.
-function createBinarySearchTreeFromSortedArray_noSlice(
+export function createBinarySearchTreeFromSortedArray_noSlice(
   array,
   start = 0,
   end = array.length - 1
@@ -53,15 +53,15 @@ function findMiddleElementIndex(array) {
   return Math.floor((array.length - 1) / 2);
 }
 
-console.log(
-  JSON.stringify(createBinarySearchTreeFromSortedArray(sortedArray)) ===
-    JSON.stringify(createBinarySearchTreeFromSortedArray_noSlice(sortedArray))
-);
+// console.log(
+//   JSON.stringify(createBinarySearchTreeFromSortedArray(sortedArray)) ===
+//     JSON.stringify(createBinarySearchTreeFromSortedArray_noSlice(sortedArray))
+// );
 
-console.log(
-  JSON.stringify(createBinarySearchTreeFromSortedArray_noSlice(sortedArray))
-);
+// console.log(
+//   JSON.stringify(createBinarySearchTreeFromSortedArray_noSlice(sortedArray))
+// );
 
-console.log(JSON.stringify(createBinarySearchTreeFromSortedArray(sortedArray)));
+// console.log(JSON.stringify(createBinarySearchTreeFromSortedArray(sortedArray)));
 
-console.log(sortedArray.length);
+// console.log(sortedArray.length);
