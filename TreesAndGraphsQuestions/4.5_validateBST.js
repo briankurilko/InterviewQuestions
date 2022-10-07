@@ -57,6 +57,7 @@ function checkIfTreeIsBst(treeNode, isRight = false) {
 
 // This is O(n) time and O(h) space (where h is the tree height), but looks pretty bad. Very bad in fact. 
 // Next time REMEMBER TO TERMINATE WHEN TREENODE IS NULL. Below code is just cleaned up.
+// I mean I think this only really works because you don't terminate the treenode when its null... but still. Try to avoid that.
 function validateBstWithoutList(root) {
   const { invalid } = checkIfTreeIsBst(root);
   return !invalid;
