@@ -86,20 +86,20 @@ class TreeNode {
   }
 }
 
-const root = new TreeNode(1);
+const bstRoot = new TreeNode(1);
 const left = new TreeNode(2);
 const right = new TreeNode(3);
 const rightTwo = new TreeNode(4);
 const rightThree = new TreeNode(5);
 const leftTwo = new TreeNode(6);
 
-root.left = left;
-root.right = right;
+bstRoot.left = left;
+bstRoot.right = right;
 right.right = rightTwo;
 right.left = rightThree;
 left.left = leftTwo;
 
-console.log(checkBalancedBruteForce(root));
-console.log(checkBalancedOptimized(root));
+console.log(checkBalancedBruteForce(bstRoot));
+console.log(checkBalancedOptimized(bstRoot));
 console.log(checkBalancedOptimized(new TreeNode(7)));
 console.log(checkBalancedOptimized(null));
