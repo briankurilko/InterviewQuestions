@@ -21,6 +21,7 @@ const testListOfDependencies = [
 
 // In this, nodes are storing their incoming edges. This method says "hey, are you dependent on any other nodes?
 // If so, store the node you're dependent on as your adjacent node."
+// In this graph, if A has an edge to B, then B must be built before A.
 function createDependencyGraphBackwards(listOfProjects, listOfDependencies) {
   const graph = { nodes: [] };
   const mapOfNodes = new Map();
@@ -42,6 +43,7 @@ function createDependencyGraphBackwards(listOfProjects, listOfDependencies) {
 
 // "Nodes typically only store their outgoing edges.".
 // This method is saying "hey, are any nodes dependent on you? If you, store the node that depends on you as your adjacent node."
+// In this graph, if A has an edge to B, then A must be built before B.
 function createDependencyGraph(listOfProjects, listOfDependencies) {
   const graph = { nodes: [] };
   const mapOfNodes = new Map();
