@@ -61,7 +61,11 @@ function createDependencyGraph(listOfProjects, listOfDependencies) {
   return graph;
 }
 
-function getBuildOrderSetDepthFirst(graph, buildOrderSet, visited = new Set()) {
+function getBuildOrderSetDepthFirst(
+  graph,
+  buildOrderArray,
+  visited = new Set()
+) {
   if (graph.nodes.some((node) => visited.has(node))) {
     throw new Error("Cannot build dependency graph");
   }
@@ -69,23 +73,23 @@ function getBuildOrderSetDepthFirst(graph, buildOrderSet, visited = new Set()) {
     if (!visited.has(node)) {
       visited.add(node);
       if (node.adjacent.length === 0) {
-        buildOrderSet.add(node.data);
+        buildOrderArray.push(node.data);
       } else {
         const nodesToAdd = [];
         for (let adjacent of node.adjacent) {
-          if (!buildOrderSet.has(adjacent.data)) {
+          if (!visited.has(adjacent)) {
             nodesToAdd.push(adjacent);
           }
         }
         if (nodesToAdd.length !== 0) {
           getBuildOrderSetDepthFirst(
             { nodes: nodesToAdd },
-            buildOrderSet,
+            buildOrderArray,
             visited
           );
         }
 
-        buildOrderSet.add(node.data);
+        buildOrderArray.push(node.data);
       }
     }
   }
@@ -130,9 +134,9 @@ function getBuildOrderDepthFirst(listOfProjects, listOfDependencies) {
     listOfProjects,
     listOfDependencies
   );
-  const buildOrderSet = new Set();
-  getBuildOrderSetDepthFirst(graph, buildOrderSet);
-  return [...buildOrderSet];
+  const buildOrderArray = [];
+  getBuildOrderSetDepthFirst(graph, buildOrderArray);
+  return buildOrderArray;
 }
 
 function topologicalSortGraph(graph, lengthOfProjects) {
