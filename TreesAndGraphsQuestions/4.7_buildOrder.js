@@ -19,18 +19,20 @@ const testListOfDependencies = [
   // new Dependency("c", "d"),
 ];
 
+// In this, nodes are storing their incoming edges. This method says "hey, are you dependent on any other nodes?
+// If so, store the node you're dependent on as your adjacent node."
 function createDependencyGraphBackwards(listOfProjects, listOfDependencies) {
   const graph = { nodes: [] };
+  const mapOfNodes = new Map();
   for (let project of listOfProjects) {
     const projectNode = { data: project, adjacent: [] };
     graph.nodes.push(projectNode);
+    mapOfNodes.set(projectNode.data, projectNode);
   }
   for (let dependency of listOfDependencies) {
     for (let node of graph.nodes) {
       if (dependency.project2 === node.data) {
-        const adjacentNode = graph.nodes.find(
-          (node) => node.data === dependency.project1
-        );
+        const adjacentNode = mapOfNodes.get(dependency.project1);
         node.adjacent.push(adjacentNode);
       }
     }
@@ -38,18 +40,20 @@ function createDependencyGraphBackwards(listOfProjects, listOfDependencies) {
   return graph;
 }
 
+// "Nodes typically only store their outgoing edges.".
+// This method is saying "hey, are any nodes dependent on you? If you, store the node that depends on you as your adjacent node."
 function createDependencyGraph(listOfProjects, listOfDependencies) {
   const graph = { nodes: [] };
+  const mapOfNodes = new Map();
   for (let project of listOfProjects) {
     const projectNode = { data: project, adjacent: [] };
     graph.nodes.push(projectNode);
+    mapOfNodes.set(projectNode.data, projectNode);
   }
   for (let dependency of listOfDependencies) {
     for (let node of graph.nodes) {
       if (dependency.project1 === node.data) {
-        const adjacentNode = graph.nodes.find(
-          (node) => node.data === dependency.project2
-        );
+        const adjacentNode = mapOfNodes.get(dependency.project2);
         node.adjacent.push(adjacentNode);
       }
     }
@@ -62,25 +66,27 @@ function getBuildOrderSetDepthFirst(graph, buildOrderSet, visited = new Set()) {
     throw new Error("Cannot build dependency graph");
   }
   for (let node of graph.nodes) {
-    visited.add(node);
-    if (node.adjacent.length === 0) {
-      buildOrderSet.add(node.data);
-    } else {
-      const nodesToAdd = [];
-      for (let adjacent of node.adjacent) {
-        if (!buildOrderSet.has(adjacent.data)) {
-          nodesToAdd.push(adjacent);
+    if (!visited.has(node)) {
+      visited.add(node);
+      if (node.adjacent.length === 0) {
+        buildOrderSet.add(node.data);
+      } else {
+        const nodesToAdd = [];
+        for (let adjacent of node.adjacent) {
+          if (!buildOrderSet.has(adjacent.data)) {
+            nodesToAdd.push(adjacent);
+          }
         }
-      }
-      if (nodesToAdd.length !== 0) {
-        getBuildOrderSetDepthFirst(
-          { nodes: nodesToAdd },
-          buildOrderSet,
-          visited
-        );
-      }
+        if (nodesToAdd.length !== 0) {
+          getBuildOrderSetDepthFirst(
+            { nodes: nodesToAdd },
+            buildOrderSet,
+            visited
+          );
+        }
 
-      buildOrderSet.add(node.data);
+        buildOrderSet.add(node.data);
+      }
     }
   }
 }
@@ -129,26 +135,35 @@ function getBuildOrderDepthFirst(listOfProjects, listOfDependencies) {
   return [...buildOrderSet];
 }
 
-function topologicalSortGraph(graph) {
-  const order = new Set();
+function topologicalSortGraph(graph, lengthOfProjects) {
+  // Step 1 of topological sort.
+  const order = [];
+  // Step 2 of topological sort.
   const processNext = new Queue();
+
+  // Step 3 of topological sort.
   const nodesToInboundCount = new Map();
   for (let node of graph.nodes) {
     for (let adjacent of node.adjacent) {
       if (nodesToInboundCount.has(adjacent)) {
-        nodesToInboundCount.set(adjacent, nodesToInboundCount.get(adjacent) + 1);
+        nodesToInboundCount.set(
+          adjacent,
+          nodesToInboundCount.get(adjacent) + 1
+        );
       } else {
         nodesToInboundCount.set(adjacent, 1);
       }
     }
   }
 
+  // Step 4 of topological sort.
   for (let node of graph.nodes) {
     if (!nodesToInboundCount.has(node)) {
       processNext.add(node);
     }
   }
 
+  // Step 5 of topological sort.
   while (!processNext.isEmpty()) {
     const n = processNext.removeFirst();
     for (let x of n.adjacent) {
@@ -157,20 +172,26 @@ function topologicalSortGraph(graph) {
         processNext.add(x);
       }
     }
-    order.add(n.data);
+    order.push(n.data);
   }
-  return [...order];
+
+  // Step 6 of topological sort.
+  if (order.length < lengthOfProjects) {
+    throw new Error(
+      "Circular dependency detected, unable to find build order."
+    );
+  }
+  return order;
 }
 
 function getBuildOrderTopologicalSort(listOfProjects, listOfDependencies) {
   const graph = createDependencyGraph(listOfProjects, listOfDependencies);
-  return topologicalSortGraph(graph);
+  return topologicalSortGraph(graph, listOfProjects.length);
 }
 
-// console.log(
-//   getBuildOrderDepthFirst(testListOfProjects, testListOfDependencies)
-// );
-// console.log(getBuildOrder(testListOfProjects, testListOfDependencies));
+console.log(
+  getBuildOrderDepthFirst(testListOfProjects, testListOfDependencies)
+);
 
 console.log(
   getBuildOrderTopologicalSort(testListOfProjects, testListOfDependencies)
