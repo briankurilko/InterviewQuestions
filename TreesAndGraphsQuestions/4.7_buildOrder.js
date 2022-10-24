@@ -16,12 +16,13 @@ const testListOfDependencies = [
   new Dependency("f", "a"),
   new Dependency("d", "c"),
   new Dependency("c", "e"),
-  // new Dependency("c", "d"),
+  new Dependency("c", "d"),
 ];
 
 // In this, nodes are storing their incoming edges. This method says "hey, are you dependent on any other nodes?
 // If so, store the node you're dependent on as your adjacent node."
 // In this graph, if A has an edge to B, then B must be built before A.
+// Store nodes that you depend on.
 function createDependencyGraphBackwards(listOfProjects, listOfDependencies) {
   const graph = { nodes: [] };
   const mapOfNodes = new Map();
@@ -42,8 +43,9 @@ function createDependencyGraphBackwards(listOfProjects, listOfDependencies) {
 }
 
 // "Nodes typically only store their outgoing edges.".
-// This method is saying "hey, are any nodes dependent on you? If you, store the node that depends on you as your adjacent node."
+// This method is saying "hey, are any nodes dependent on you? If so, store the node that depends on you as your adjacent node."
 // In this graph, if A has an edge to B, then A must be built before B.
+// Store nodes dependent on this node.
 function createDependencyGraph(listOfProjects, listOfDependencies) {
   const graph = { nodes: [] };
   const mapOfNodes = new Map();
@@ -66,22 +68,21 @@ function createDependencyGraph(listOfProjects, listOfDependencies) {
 function getBuildOrderSetDepthFirst(
   graph,
   buildOrderArray,
-  visited = new Set()
+  visited = new Map()
 ) {
-  if (graph.nodes.some((node) => visited.has(node))) {
-    throw new Error("Cannot build dependency graph");
-  }
   for (let node of graph.nodes) {
-    if (!visited.has(node)) {
-      visited.add(node);
+    if (visited.get(node) === "visiting") {
+      throw new Error("Cannot build dependency graph.");
+    }
+    if (visited.get(node) === undefined || visited.get(node) !== "visited") {
+      visited.set(node, "visiting");
       if (node.adjacent.length === 0) {
+        visited.set(node, "visited");
         buildOrderArray.push(node.data);
       } else {
         const nodesToAdd = [];
         for (let adjacent of node.adjacent) {
-          if (!visited.has(adjacent)) {
-            nodesToAdd.push(adjacent);
-          }
+          nodesToAdd.push(adjacent);
         }
         if (nodesToAdd.length !== 0) {
           getBuildOrderSetDepthFirst(
@@ -91,6 +92,7 @@ function getBuildOrderSetDepthFirst(
           );
         }
 
+        visited.set(node, "visited");
         buildOrderArray.push(node.data);
       }
     }
