@@ -31,50 +31,126 @@ const bstRoot = createBinarySearchTreeFromSortedArray([
 console.log(JSON.stringify(bstRoot));
 assignTreeNodesParents(bstRoot);
 
-const firstNode = bstRoot.right.right.right;
-const secondNode = bstRoot.right.right;
+const firstNode = bstRoot;
+const secondNode = bstRoot.left;
 
-// This is O(n) time, where n is the size of the tree. O(1) space (I guess? we record the depth in the node...)
-function findFirstCommonAncestorUsingParent(startNode, endNode, depth = 0) {
-  startNode.depth = depth;
-  if (startNode === endNode) {
-    return startNode;
+// This is O(n) time, where n is the size of the tree. O(n) space due to the stack frames.
+// We need to store the depth because it's also our "visited" bit. BUT, this solution isn't ideal.
+// Because the space complexity is O(n)
+function findFirstCommonAncestorUsingParentDFS(
+  firstNode,
+  secondNode,
+  depth = 0
+) {
+  firstNode.depth = depth;
+  if (firstNode === secondNode) {
+    return firstNode;
   }
-  if (startNode === null) {
+  if (firstNode === null) {
     return null;
   }
 
-  if (startNode.left?.depth === null) {
-    const highestNode = findFirstCommonAncestorUsingParent(
-      startNode.left,
-      endNode,
+  if (firstNode.left?.depth === null) {
+    const highestNode = findFirstCommonAncestorUsingParentDFS(
+      firstNode.left,
+      secondNode,
       depth + 1
     );
     if (highestNode) {
-      return highestNode.depth < startNode.depth ? highestNode : startNode;
+      return highestNode.depth < firstNode.depth ? highestNode : firstNode;
     }
   }
-  if (startNode.right?.depth === null) {
-    const highestNode = findFirstCommonAncestorUsingParent(
-      startNode.right,
-      endNode,
+  if (firstNode.right?.depth === null) {
+    const highestNode = findFirstCommonAncestorUsingParentDFS(
+      firstNode.right,
+      secondNode,
       depth + 1
     );
     if (highestNode) {
-      return highestNode.depth < startNode.depth ? highestNode : startNode;
+      return highestNode.depth < firstNode.depth ? highestNode : firstNode;
     }
   }
-  if (startNode.parent?.depth === null) {
-    const highestNode = findFirstCommonAncestorUsingParent(
-      startNode.parent,
-      endNode,
+  if (firstNode.parent?.depth === null) {
+    const highestNode = findFirstCommonAncestorUsingParentDFS(
+      firstNode.parent,
+      secondNode,
       depth - 1
     );
     if (highestNode) {
-      return highestNode.depth < startNode.depth ? highestNode : startNode;
+      return highestNode.depth < firstNode.depth ? highestNode : firstNode;
     }
   }
   return null;
 }
 
-console.log(findFirstCommonAncestorUsingParent(firstNode, secondNode));
+function findNodeDepth(node) {
+  let currentNode = node;
+  let depth = 0;
+  while (currentNode.parent != null) {
+    depth++;
+    currentNode = currentNode.parent;
+  }
+  return depth;
+}
+
+// This is O(n) time too, where n is the size of the tree. O(1) space. Better than your original solution.
+function findFirstCommonAncestorWithParentOptimized(firstNode, secondNode) {
+  const firstNodeDepth = findNodeDepth(firstNode);
+  const secondNodeDepth = findNodeDepth(secondNode);
+  let firstNodeRunner = firstNode;
+  let secondNodeRunner = secondNode;
+  if (firstNodeDepth > secondNodeDepth) {
+    for (let i = 0; i < firstNodeDepth - secondNodeDepth; ++i) {
+      firstNodeRunner = firstNodeRunner.parent;
+    }
+  } else if (firstNodeDepth < secondNodeDepth) {
+    for (let i = 0; i < secondNodeDepth - firstNodeDepth; ++i) {
+      secondNodeRunner = secondNodeRunner.parent;
+    }
+  }
+
+  while (secondNodeRunner !== null && firstNodeRunner !== null) {
+    if (firstNodeRunner === secondNodeRunner) {
+      return firstNodeRunner;
+    }
+    firstNodeRunner = firstNodeRunner.parent;
+    secondNodeRunner = secondNodeRunner.parent;
+  }
+  return null;
+}
+
+function findIfNodeDescendsFromParent(parent, node) {
+  if (parent === null) {
+    return false;
+  }
+  if (parent === node) {
+    return true;
+  }
+
+  return (
+    findIfNodeDescendsFromParent(parent.left, node) ||
+    findIfNodeDescendsFromParent(parent.right, node)
+  );
+}
+
+function findFirstCommonAncestorWithoutParent(root, firstNode, secondNode) {
+  if (root === null) {
+    return null;
+  }
+  const firstNodeDescendsFromParent = findIfNodeDescendsFromParent(
+    root,
+    firstNode
+  );
+  const secondNodeDescendsFromParent = findIfNodeDescendsFromParent(
+    root,
+    secondNode
+  );
+  if (firstNodeDescendsFromParent && secondNodeDescendsFromParent) {
+    if (first)
+  }
+}
+
+console.log(findFirstCommonAncestorUsingParentDFS(firstNode, secondNode).data);
+console.log(
+  findFirstCommonAncestorWithParentOptimized(firstNode, secondNode).data
+);
