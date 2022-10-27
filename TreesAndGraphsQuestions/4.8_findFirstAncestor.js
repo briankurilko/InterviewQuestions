@@ -31,8 +31,8 @@ const bstRoot = createBinarySearchTreeFromSortedArray([
 console.log(JSON.stringify(bstRoot));
 assignTreeNodesParents(bstRoot);
 
-const firstNode = bstRoot;
-const secondNode = bstRoot.left;
+const firstNode = bstRoot.right.right.right;
+const secondNode = bstRoot.right.left.right;
 
 // This is O(n) time, where n is the size of the tree. O(n) space due to the stack frames.
 // We need to store the depth because it's also our "visited" bit. BUT, this solution isn't ideal.
@@ -133,24 +133,82 @@ function findIfNodeDescendsFromParent(parent, node) {
   );
 }
 
-function findFirstCommonAncestorWithoutParent(root, firstNode, secondNode) {
+function subTreeContainsNode(root, node) {
+  if (root === node) {
+    return true;
+  }
+  if (root === null) {
+    return false;
+  }
+  return (
+    subTreeContainsNode(root.left, node) ||
+    subTreeContainsNode(root.right, node)
+  );
+}
+
+// This is O(n^2) time and O(n) space (because of the stack frames). Cuz for each stack trace downward, it'll create a stack of size O(n)...
+// But that stack gets deleted with each deeper recursion, right? So I don't think the stack frames ever get above O(n) size. So maybe it's O(n) space?
+function findFirstCommonAncestorWithoutParent_naive(
+  root,
+  firstNode,
+  secondNode
+) {
+  if (firstNode === secondNode) {
+    return firstNode;
+  }
   if (root === null) {
     return null;
   }
-  const firstNodeDescendsFromParent = findIfNodeDescendsFromParent(
-    root,
-    firstNode
-  );
-  const secondNodeDescendsFromParent = findIfNodeDescendsFromParent(
-    root,
-    secondNode
-  );
-  if (firstNodeDescendsFromParent && secondNodeDescendsFromParent) {
-    if (first)
+
+  if (subTreeContainsNode(root.left, firstNode)) {
+    if (subTreeContainsNode(root.right, secondNode)) {
+      return root;
+    }
+    return findFirstCommonAncestorWithoutParent_naive(
+      root.left,
+      firstNode,
+      secondNode
+    );
   }
+  if (subTreeContainsNode(root.right, firstNode)) {
+    if (subTreeContainsNode(root.left, secondNode)) {
+      return root;
+    }
+    return findFirstCommonAncestorWithoutParent_naive(
+      root.right,
+      firstNode,
+      secondNode
+    );
+  }
+  if (subTreeContainsNode(root.left, secondNode)) {
+    if (subTreeContainsNode(root.right, firstNode)) {
+      return root;
+    }
+    return findFirstCommonAncestorWithoutParent_naive(
+      root.left,
+      firstNode,
+      secondNode
+    );
+  }
+  if (subTreeContainsNode(root.right, secondNode)) {
+    if (subTreeContainsNode(root.left, firstNode)) {
+      return root;
+    }
+    return findFirstCommonAncestorWithoutParent_naive(
+      root.right,
+      firstNode,
+      secondNode
+    );
+  }
+  return null;
 }
 
-console.log(findFirstCommonAncestorUsingParentDFS(firstNode, secondNode).data);
+// console.log(findFirstCommonAncestorUsingParentDFS(firstNode, secondNode).data);
 console.log(
   findFirstCommonAncestorWithParentOptimized(firstNode, secondNode).data
+);
+
+console.log(
+  findFirstCommonAncestorWithoutParent_naive(bstRoot, firstNode, secondNode)
+    .data
 );
