@@ -95,7 +95,7 @@ function findNodeDepth(node) {
   return depth;
 }
 
-// This is O(n) time too, where n is the size of the tree. O(1) space. Better than your original solution.
+// This is O(d) time too, where d is the depth of the tree. O(1) space. Better than your original solution.
 function findFirstCommonAncestorWithParentOptimized(firstNode, secondNode) {
   const firstNodeDepth = findNodeDepth(firstNode);
   const secondNodeDepth = findNodeDepth(secondNode);
