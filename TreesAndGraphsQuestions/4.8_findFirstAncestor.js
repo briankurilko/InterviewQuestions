@@ -31,8 +31,10 @@ const bstRoot = createBinarySearchTreeFromSortedArray([
 console.log(JSON.stringify(bstRoot));
 assignTreeNodesParents(bstRoot);
 
-const firstNode = bstRoot.right.right.right;
-const secondNode = bstRoot.right.left.right;
+const treeWithOneNode = createBinarySearchTreeFromSortedArray([1]);
+
+const firstNode = bstRoot.left.right.right;
+const secondNode = bstRoot.left.left;
 
 // This is O(n) time, where n is the size of the tree. O(n) space due to the stack frames.
 // We need to store the depth because it's also our "visited" bit. BUT, this solution isn't ideal.
@@ -156,6 +158,9 @@ function findFirstCommonAncestorWithoutParent_naive(
   if (firstNode === secondNode) {
     return firstNode;
   }
+  if (root === firstNode || root === secondNode) {
+    return root;
+  }
   if (root === null) {
     return null;
   }
@@ -203,12 +208,64 @@ function findFirstCommonAncestorWithoutParent_naive(
   return null;
 }
 
+// This is O(n) time (where n is the number of nodes), and O(h) space, where h is the depth of the tree.
+// Remember: keep in mind how to rewind the stack as an optimization.
+// This covers the cases in which we get nodes that aren't a part of the tree the same way the book asks to.
+function findFirstCommonAncestorWithoutParent_optimized(
+  root,
+  firstNode,
+  secondNode
+) {
+  if (root === null) {
+    return null;
+  }
+  if (root === firstNode || root === secondNode) {
+    return root;
+  }
+  // check the left side to see if we have the node.
+  const nodeOnLeftSide = findFirstCommonAncestorWithoutParent_optimized(
+    root.left,
+    firstNode,
+    secondNode
+  );
+  if (nodeOnLeftSide) {
+    // if we do, great! Check the right side to see if we have the node there!
+    const nodeOnRightSide = findFirstCommonAncestorWithoutParent_optimized(
+      root.right,
+      firstNode,
+      secondNode
+    );
+    if (nodeOnRightSide) {
+      return root;
+    } else {
+      return nodeOnLeftSide;
+    }
+  }
+  // If we don't have the node on the left side, then check the right subtree.
+  return findFirstCommonAncestorWithoutParent_optimized(
+    root.right,
+    firstNode,
+    secondNode
+  );
+}
+
 // console.log(findFirstCommonAncestorUsingParentDFS(firstNode, secondNode).data);
 console.log(
   findFirstCommonAncestorWithParentOptimized(firstNode, secondNode).data
 );
 
+// console.log(
+//   findFirstCommonAncestorWithoutParent_naive(bstRoot, firstNode, secondNode)
+//     .data
+// );
+
 console.log(
-  findFirstCommonAncestorWithoutParent_naive(bstRoot, firstNode, secondNode)
+  findFirstCommonAncestorWithoutParent_optimized(bstRoot, firstNode, secondNode)
     .data
 );
+
+console.log(
+  findFirstCommonAncestorWithoutParent_optimized(treeWithOneNode, treeWithOneNode, {})
+    ?.data
+);
+
