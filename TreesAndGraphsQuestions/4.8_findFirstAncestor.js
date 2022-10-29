@@ -150,6 +150,8 @@ function subTreeContainsNode(root, node) {
 
 // This is O(n^2) time and O(n) space (because of the stack frames). Cuz for each stack trace downward, it'll create a stack of size O(n)...
 // But that stack gets deleted with each deeper recursion, right? So I don't think the stack frames ever get above O(n) size. So maybe it's O(n) space?
+// The book says this is actually O(n) time complexity, because the amount of stuff you're searching goes down by 2 each time you searched
+// (if you're searching through a balanced tree).
 function findFirstCommonAncestorWithoutParent_naive(
   root,
   firstNode,
