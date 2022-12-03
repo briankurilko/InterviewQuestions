@@ -51,3 +51,7 @@ function convertToAdjacencyList(matrix) {
     }
   }
 }
+
+// https://www.geeksforgeeks.org/maximum-sum-path-in-a-matrix-from-top-left-to-bottom-right/
+// https://workat.tech/problem-solving/approach/mpsm/max-path-sum-matrix
+// https://stackoverflow.com/questions/71759812/maximum-sum-path-from-top-left-to-bottom-right-in-a-grid-using-dynamic-programmi
