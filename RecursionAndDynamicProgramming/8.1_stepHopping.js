@@ -1,7 +1,7 @@
 // Close to O(3^n) time complexity. 
 // The tree makes it look like there's going to be O(n) space complexity, because the depth is never greater than n.
 function findStepsBruteForce(n) {
-  if (n === 0 || n === 1) {
+  if (n === 0) {
     return 1;
   }
   if (n < 0) {
@@ -16,7 +16,7 @@ function findStepsBruteForce(n) {
 
 // O(n) time complexity, O(n) space complexity.
 function findStepsTopDown(n, memo = []) {
-  if (n === 0 || n === 1) {
+  if (n === 0) {
     return 1;
   }
   if (n < 0) {
