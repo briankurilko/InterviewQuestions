@@ -54,6 +54,6 @@ function findStepsBottomUp(n) {
     return a + b + c;
 }
 
-console.log(findStepsTopDown(3)); // should be 274.
-console.log(findStepsBottomUp(3)); // should be 274.
+console.log(findStepsTopDown(10)); // should be 274.
+console.log(findStepsBottomUp(10)); // should be 274.
 console.log(findStepsBruteForce(5)); // should be 13.
