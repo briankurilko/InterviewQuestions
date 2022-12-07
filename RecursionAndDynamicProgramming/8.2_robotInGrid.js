@@ -41,21 +41,18 @@ function readGrid(grid) {
 
 function traverseDownOrRight(
   grid,
-  coordinate,
   endCoordinates,
-  mapOfPaths,
+  visitedSet,
   newCoordinate
 ) {
-  if (!mapOfPaths.has(newCoordinate.toString())) {
-    const newPath = [].concat(mapOfPaths.get(coordinate.toString()));
-    newPath.push(newCoordinate);
-    mapOfPaths.set(newCoordinate.toString(), newPath);
+  if (!visitedSet.has(newCoordinate.toString())) {
+    visitedSet.add(newCoordinate.toString());
 
     const finalPath = traverseGridDepthFirst(
       grid,
       newCoordinate,
       endCoordinates,
-      mapOfPaths
+      visitedSet
     );
 
     return finalPath;
@@ -67,18 +64,18 @@ function traverseGridDepthFirst(
   grid,
   coordinate = [0, 0],
   endCoordinates = [grid.length - 1, grid[0].length - 1],
-  mapOfPaths = new Map()
+  visitedSet = new Set()
 ) {
   if (grid.length === 0 || grid[0].length === 0 || grid[0][0] === false) {
     return [];
   }
 
-  if (!mapOfPaths.has(coordinate.toString())) {
-    mapOfPaths.set(coordinate.toString(), [coordinate]);
+  if (!visitedSet.has(coordinate.toString())) {
+    visitedSet.add(coordinate.toString());
   }
 
   if (coordinate.toString() === endCoordinates.toString()) {
-    return mapOfPaths.get(coordinate.toString());
+    return [coordinate];
   }
 
   const canMoveDown =
@@ -92,12 +89,12 @@ function traverseGridDepthFirst(
     const newCoordinate = [coordinate[0] + 1, coordinate[1]];
     const finalPath = traverseDownOrRight(
       grid,
-      coordinate,
       endCoordinates,
-      mapOfPaths,
+      visitedSet,
       newCoordinate
     );
     if (finalPath.length !== 0) {
+      finalPath.push(coordinate);
       return finalPath;
     }
   }
@@ -106,12 +103,12 @@ function traverseGridDepthFirst(
     const newCoordinate = [coordinate[0], coordinate[1] + 1];
     const finalPath = traverseDownOrRight(
       grid,
-      coordinate,
       endCoordinates,
-      mapOfPaths,
+      visitedSet,
       newCoordinate
     );
     if (finalPath.length !== 0) {
+      finalPath.push(coordinate);
       return finalPath;
     }
   }
@@ -216,7 +213,7 @@ function printPathInGrid(grid, path) {
 }
 
 const booleanGrid = readGrid(testGrid);
-const depthFirstPath = traverseGridDepthFirst(booleanGrid);
+const depthFirstPath = traverseGridDepthFirst(booleanGrid).reverse();
 
 console.log(depthFirstPath);
 console.log(printPathInGrid(booleanGrid, depthFirstPath));
