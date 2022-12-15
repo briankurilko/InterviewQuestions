@@ -8,8 +8,7 @@ function magicIndexBruteForce(array) {
   return null;
 }
 
-// O(log n) time, .... I think this is tail recursive? So O(1) space.
-// You need to be able to explain how this binary search thing works better. I think this works I'm just confused as to why.
+// O(log n) time, .... I think this is tail recursive? So O(1) space because of tail recursion.
 function magicIndexBinarySearch(array, min = 0, max = array.length - 1) {
   if (min > max) {
     return null;
@@ -25,7 +24,7 @@ function magicIndexBinarySearch(array, min = 0, max = array.length - 1) {
   }
 }
 
-// O(log n) time, .... I think this is tail recursive? So O(1) space.
+// O(log n) time best case, O(n) time worst case. Same thing with space complexity.
 function magicIndexBinarySearchHandleNonDistinct(
   array,
   min = 0,
@@ -35,18 +34,25 @@ function magicIndexBinarySearchHandleNonDistinct(
     return null;
   }
 
-  const mid = Math.floor((min + max) / 2);
-  if (array[mid] === mid) {
-    return mid;
-  } else if (array[mid] < mid) {
-    return magicIndexBinarySearch(array, mid + 1, max);
-  } else {
-    return magicIndexBinarySearch(array, min, mid - 1);
+  const midIndex = Math.floor((max + min) / 2);
+  const midValue = array[midIndex];
+
+  if (midIndex === midValue) {
+    return midIndex;
   }
+
+  const leftIndex = Math.min(midIndex - 1, midValue);
+  const left = magicIndexBinarySearchHandleNonDistinct(array, min, leftIndex);
+  if (left !== null) {
+    return left;
+  }
+
+  const rightIndex = Math.max(midIndex + 1, midValue);
+  return magicIndexBinarySearchHandleNonDistinct(array, rightIndex, max);
 }
 
-// const sortedArray = [-1, 0, 1, 2, 4];
-const sortedArray = [-1, 0, 1, 4, 4];
+const sortedArray = [-1, 0, 1, 2, 4];
+const sortedArray2 = [-1, 0, 3, 4, 4];
 
-console.log(magicIndexBruteForce(sortedArray));
-console.log(magicIndexBinarySearchHandleNonDistinct(sortedArray));
+console.log(magicIndexBinarySearch(sortedArray));
+console.log(magicIndexBinarySearchHandleNonDistinct(sortedArray2));
