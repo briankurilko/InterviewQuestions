@@ -1,56 +1,106 @@
-function findMaxInMatrix(matrix) {
-  if (matrix.length === 1 && matrix[0].length === 1) {
-    return matrix[0][0];
+function findMaxInMatrixBruteForceHelper(
+  matrix,
+  coordinate = [0, 0],
+  runningSum = 0
+) {
+  const rightwardCoord = [coordinate[0], coordinate[1] + 1];
+  const canMoveRight = rightwardCoord[1] < matrix[0].length;
+
+  const downwardCoord = [coordinate[0] + 1, coordinate[1]];
+  const canMoveDown = downwardCoord[0] < matrix.length;
+
+  const currentValue = matrix[coordinate[0]][coordinate[1]];
+  runningSum += currentValue;
+
+  if (!canMoveDown && !canMoveRight) {
+    return [runningSum];
   }
 
-  const work = [{ max: matrix[0][0], at: [0, 0] }];
-
-  for (let i = 0; i < work.length; ++i) {
-    let { at, route } = work[i];
-    for (let i = at[0], j = at[1]; i < matrix.length; ++i) {
-      if (
-        spot === matrix[matrix.length - 1][matrix[matrix.length - 1].length - 1]
-      ) {
-        // do not add work, calculate max.
-        work[i].max += spot;
-      } else {
-        work.push({ max: work[i].max + spot, at: [] });
-      }
-    }
+  let listOfPathSums = [];
+  if (canMoveRight) {
+    listOfPathSums = listOfPathSums.concat(
+      findMaxInMatrixBruteForceHelper(matrix, rightwardCoord, runningSum)
+    );
   }
+  if (canMoveDown) {
+    listOfPathSums = listOfPathSums.concat(
+      findMaxInMatrixBruteForceHelper(matrix, downwardCoord, runningSum)
+    );
+  }
+  return listOfPathSums;
 }
 
+// This is probably around O(2^(number of paths)) time complexity, and O(number of paths) space complexity. Idk how to find the number of paths.
+function findMaxInMatrixBruteForce(matrix) {
+  return Math.max(...findMaxInMatrixBruteForceHelper(matrix));
+}
+
+// Alright, solved with memoizing! O(n) time and O(n) space, where n is the number of cells in the matrix.
+function findMaxInMatrixMemoizedHelper(
+  matrix,
+  coordinate = [0, 0],
+  memo = new Map()
+) {
+  const rightwardCoord = [coordinate[0], coordinate[1] + 1];
+  const canMoveRight = rightwardCoord[1] < matrix[0].length;
+
+  const downwardCoord = [coordinate[0] + 1, coordinate[1]];
+  const canMoveDown = downwardCoord[0] < matrix.length;
+
+  const currentValue = matrix[coordinate[0]][coordinate[1]];
+
+  if (!canMoveDown && !canMoveRight) {
+    memo.set(coordinate.toString(), currentValue);
+    return [currentValue];
+  }
+
+  let listOfPathSums = [];
+  if (canMoveRight) {
+    if (memo.has(rightwardCoord.toString())) {
+      const results = memo.get(rightwardCoord.toString());
+      results.forEach((result) => listOfPathSums.push(currentValue + result));
+    } else {
+      const results = findMaxInMatrixMemoizedHelper(
+        matrix,
+        rightwardCoord,
+        memo
+      );
+      memo.set(rightwardCoord.toString(), results);
+      results.forEach((result) => listOfPathSums.push(result + currentValue));
+    }
+  }
+
+  if (canMoveDown) {
+    if (memo.has(downwardCoord.toString())) {
+      const results = memo.get(downwardCoord.toString());
+      results.forEach((result) => listOfPathSums.push(currentValue + result));
+    } else {
+      const results = findMaxInMatrixMemoizedHelper(
+        matrix,
+        downwardCoord,
+        memo
+      );
+      memo.set(downwardCoord.toString(), results);
+      results.forEach((result) => listOfPathSums.push(result + currentValue));
+    }
+  }
+  return listOfPathSums;
+}
+
+function findMaxInMatrixMemoized(matrix) {
+  const result = findMaxInMatrixMemoizedHelper(matrix);
+  return Math.max(...result);
+}
+
+// I think 30 is the highest path here?
 const testArray = [
   [9, 3, 4],
   [10, 4, 5],
   [5, 3, 2],
 ];
 
-findMaxInMatrix(array, [0, 0]);
-
-// first convert matrix to tree I guess? Or adjacency list? How would you do that...
-// 9: 3, 10.
-// 3: 4, 4.
-// 4: 5
-// 10: 4, 5
-// 4: 5, 3
-// 5: 2
-// 5: 3
-// 3: 2
-// 2: []
-function convertToAdjacencyList(matrix) {
-  const adjacencyList = [];
-  // maybe loop through matrix backwards?
-  for (let i = matrix.length - 1; i >= 0; --i) {
-    for (let j = matrix[0].length - 1; j >= 0; ++j) {
-      let newNode = { value: matrix[i][j], adjacent: [] };
-      if (matrix[i][j + 1] !== undefined) {
-        newNode.adjacent.push(new Node()); // idk man.
-      }
-      adjacencyList.unshift(newNode);
-    }
-  }
-}
+console.log(findMaxInMatrixBruteForce(testArray));
+console.log(findMaxInMatrixMemoized(testArray));
 
 // https://www.geeksforgeeks.org/maximum-sum-path-in-a-matrix-from-top-left-to-bottom-right/
 // https://workat.tech/problem-solving/approach/mpsm/max-path-sum-matrix
