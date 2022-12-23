@@ -102,6 +102,68 @@ function getMax(arr) {
   return max;
 }
 
+function findMaxInMatrixOptimizedMemoized(
+  matrix,
+  rowIndex = matrix.length - 1,
+  colIndex = matrix[0].length - 1,
+  memo = []
+) {
+  if (rowIndex === 0 && colIndex === 0) {
+    let greatestValue = findGreatestValue(memo[0][1], memo[1][0]);
+    if (memo[0][0] === undefined || matrix[0][0] + greatestValue > memo[0][0]) {
+      memo[0][0] = matrix[0][0] + greatestValue;
+    }
+  }
+  if (rowIndex < 0 || colIndex < 0) {
+    return null;
+  }
+
+  if (memo[rowIndex][colIndex] === undefined) {
+    const currentValue = matrix[rowIndex][colIndex];
+    const greatestValue = findGreatestValue(
+      memo[rowIndex] && memo[rowIndex][colIndex + 1],
+      memo[rowIndex + 1] && memo[rowIndex + 1][colIndex]
+    );
+
+    memo[rowIndex][colIndex] = currentValue + greatestValue;
+    return (
+      findMaxInMatrixOptimizedMemoized(matrix, rowIndex - 1, colIndex, memo) ===
+        null ||
+      findMaxInMatrixOptimizedMemoized(matrix, rowIndex, colIndex - 1, memo) ===
+        null
+    );
+  }
+  return null;
+}
+
+// O(n + m) time, O(n + m) space, I think. I don't really understand how I did this? But it does seem to work.
+function findMaxInMatrix(matrix) {
+  const memo = new Array(matrix.length);
+  for (let i = 0; i < memo.length; ++i) {
+    memo[i] = new Array(matrix[0].length);
+  }
+
+  findMaxInMatrixOptimizedMemoized(
+    matrix,
+    matrix.length - 1,
+    matrix[0].length - 1,
+    memo
+  );
+  return memo[0][0];
+}
+
+function findGreatestValue(rightValue, downValue) {
+  let greatestValue = 0;
+  if (downValue !== undefined && rightValue !== undefined) {
+    greatestValue = downValue > rightValue ? downValue : rightValue;
+  } else if (downValue !== undefined) {
+    greatestValue = downValue;
+  } else if (rightValue !== undefined) {
+    greatestValue = rightValue;
+  }
+  return greatestValue;
+}
+
 // I think the best way to do this is to go through the array and go backwards, and only memoize the max length path, maybe? Idk.
 
 // I think 30 is the highest path here?
@@ -148,7 +210,20 @@ const testArray = [
   ],
 ];
 
+const testArray2 = [
+  [9, 3, 4],
+  [10, 4, 5],
+  [5, 3, 2],
+];
+
+const testArray3 = [
+  [9, 323, 4, 1234],
+  [121340, 432, 52, 5432],
+  [5, 3, 234, 12354],
+];
+
 // console.log(findMaxInMatrixMemoized(testArray));
+console.log(findMaxInMatrix(testArray));
 console.log(findMaxInMatrixBruteForce(testArray));
 
 // https://www.geeksforgeeks.org/maximum-sum-path-in-a-matrix-from-top-left-to-bottom-right/
