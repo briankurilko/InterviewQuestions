@@ -108,48 +108,35 @@ function findMaxInMatrixOptimizedMemoized(
   colIndex = matrix[0].length - 1,
   memo = []
 ) {
-  if (rowIndex === 0 && colIndex === 0) {
-    let greatestValue = findGreatestValue(memo[0][1], memo[1][0]);
-    if (memo[0][0] === undefined || matrix[0][0] + greatestValue > memo[0][0]) {
-      memo[0][0] = matrix[0][0] + greatestValue;
-    }
-  }
   if (rowIndex < 0 || colIndex < 0) {
-    return null;
+    return 0;
   }
 
-  if (memo[rowIndex][colIndex] === undefined) {
-    const currentValue = matrix[rowIndex][colIndex];
-    const greatestValue = findGreatestValue(
-      memo[rowIndex] && memo[rowIndex][colIndex + 1],
-      memo[rowIndex + 1] && memo[rowIndex + 1][colIndex]
-    );
-
-    memo[rowIndex][colIndex] = currentValue + greatestValue;
-    return (
-      findMaxInMatrixOptimizedMemoized(matrix, rowIndex - 1, colIndex, memo) ===
-        null ||
-      findMaxInMatrixOptimizedMemoized(matrix, rowIndex, colIndex - 1, memo) ===
-        null
-    );
+  if (memo[rowIndex][colIndex] !== undefined) {
+    return memo[rowIndex][colIndex];
   }
-  return null;
+
+  memo[rowIndex][colIndex] =
+    Math.max(
+      findMaxInMatrixOptimizedMemoized(matrix, rowIndex - 1, colIndex, memo),
+      findMaxInMatrixOptimizedMemoized(matrix, rowIndex, colIndex - 1, memo)
+    ) + matrix[rowIndex][colIndex];
+  return memo[rowIndex][colIndex];
 }
 
-// O(n + m) time, O(n + m) space, I think. I don't really understand how I did this? But it does seem to work.
+// O(n * m) time, O(n * m) space. n is length, m is width of matrix.
 function findMaxInMatrix(matrix) {
   const memo = new Array(matrix.length);
   for (let i = 0; i < memo.length; ++i) {
     memo[i] = new Array(matrix[0].length);
   }
 
-  findMaxInMatrixOptimizedMemoized(
+  return findMaxInMatrixOptimizedMemoized(
     matrix,
     matrix.length - 1,
     matrix[0].length - 1,
     memo
   );
-  return memo[0][0];
 }
 
 function findGreatestValue(rightValue, downValue) {
@@ -223,8 +210,8 @@ const testArray3 = [
 ];
 
 // console.log(findMaxInMatrixMemoized(testArray));
-console.log(findMaxInMatrix(testArray));
-console.log(findMaxInMatrixBruteForce(testArray));
+console.log(findMaxInMatrix(testArray2));
+console.log(findMaxInMatrixBruteForce(testArray2));
 
 // https://www.geeksforgeeks.org/maximum-sum-path-in-a-matrix-from-top-left-to-bottom-right/
 // https://workat.tech/problem-solving/approach/mpsm/max-path-sum-matrix
