@@ -35,7 +35,7 @@ function findMaxInMatrixBruteForce(matrix) {
   return getMax(findMaxInMatrixBruteForceHelper(matrix));
 }
 
-// Alright, solved with memoizing! O(number of paths) time complexity/space complexity. Could probably save memory still...
+// ... Not great memoization here tbh... Only saves a little time.
 function findMaxInMatrixMemoizedHelper(
   matrix,
   coordinate = [0, 0],
