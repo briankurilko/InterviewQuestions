@@ -2,3 +2,5 @@
 Java-Implementations/.idea
 *.iml
 .DS_Store
+target
+node_modules
