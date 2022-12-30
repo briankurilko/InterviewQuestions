@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-// 1.2: Check Permutation
+// Question 1.2: Check Permutation
 // Given two strings, write a method to decide if one is a permutation of the other.
 public class CheckPermutation {
 
