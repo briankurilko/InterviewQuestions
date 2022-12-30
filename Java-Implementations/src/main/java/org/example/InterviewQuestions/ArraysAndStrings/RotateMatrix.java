@@ -13,7 +13,7 @@ public class RotateMatrix {
         int offset = 1;
         while (layer < matrix.length / 2) {
             rotateCells(matrix, layer, col);
-            col += 1;
+            col++;
             if (col > matrix[0].length - 1 - offset) {
                 col = offset;
                 layer++;
