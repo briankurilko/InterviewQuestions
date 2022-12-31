@@ -7,17 +7,18 @@ function oneAway(str1, str2) {
   return oneAwayInsert(str2, str1);
 }
 
-function oneAwayInsert(str1, str2) {
-  for (
-    let shortIndex = 0, longIndex = 0;
-    shortIndex < str2.length;
-    ++shortIndex, ++longIndex
-  ) {
-    if (str2[shortIndex] !== str1[longIndex]) {
-      longIndex++;
-      if (longIndex - shortIndex > 1) {
+function oneAwayInsert(longer, shorter) {
+  let longIndex = 0;
+  let shortIndex = 0;
+  while (longIndex < longer.length && shortIndex < shorter.length) {
+    if (longer[longIndex] !== shorter[shortIndex]) {
+      if (Math.abs(longIndex - shortIndex) >= 1) {
         return false;
       }
+      ++longIndex;
+    } else {
+      ++shortIndex;
+      ++longIndex;
     }
   }
   return true;
@@ -43,3 +44,4 @@ console.log(oneAway("pale", "bake"));
 console.log(oneAway("palelhbhb", "bake"));
 console.log(oneAway("pale", "pale"));
 console.log(oneAway("aabb", "bbaa"));
+console.log(oneAway("ple", "pade"));

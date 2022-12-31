@@ -12,8 +12,8 @@ class CheckPermutationTest {
         String string2 = "fdabce";
         assertTrue(CheckPermutation.checkPermutationMapSolution(string1, string2));
 
-        string1 = "sdfbasdf";
-        string2 = "sdaofiuh";
+        string1 = "abcdef";
+        string2 = "hijklm";
         assertFalse(CheckPermutation.checkPermutationMapSolution(string1, string2));
 
         string1 = "poiuhbh";

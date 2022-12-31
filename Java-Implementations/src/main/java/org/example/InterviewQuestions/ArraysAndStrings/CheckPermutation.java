@@ -37,7 +37,7 @@ public class CheckPermutation {
                 return false;
             }
             Integer count = string1Map.get(c);
-            count -= 1;
+            count--;
             if (count < 0) {
                 return false;
             }
