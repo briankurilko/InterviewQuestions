@@ -21,6 +21,7 @@
 // Idk. Maybe lets just try coding it.
 
 // Gonna assume that the binary string is a character array, so we can swap it in place.
+// O(n^2) time, O(1) space. O(n) time if the string can't become a palindrome, or already is one.
 function stepsToPalindrome(binaryString) {
   let zeroCount = 0,
     oneCount = 0;
