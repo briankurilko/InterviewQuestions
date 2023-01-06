@@ -59,6 +59,8 @@ function stepsToPalindrome(binaryString) {
       }
       if (k === left) {
         ++steps;
+        ++left;
+        continue;
       } else {
         steps++;
         swap(binaryString, k, right);
