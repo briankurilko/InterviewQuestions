@@ -53,14 +53,13 @@ function stepsToPalindrome(binaryString) {
       k = right - 1;
       j = left + 1;
       const swapIndex = findSwapIndex(binaryString, k, j, left);
-      if (swapIndex >= 0) {
-        ++steps;
+      if (binaryString[swapIndex] === binaryString[left]) {
         swap(binaryString, swapIndex, right);
       } else {
-        ++left;
-        ++steps;
-        continue;
+        // don't really have to do anything here, I'm just swapping so that the string looks like a palindrome.
+        swap(binaryString, swapIndex, left);
       }
+      ++steps;
     }
     ++left;
     --right;
@@ -103,3 +102,4 @@ console.log(stepsToPalindrome("11101".split("")) === 1); // should be 1.
 console.log(stepsToPalindrome("101100".split("")) === -1); // should be -1.
 console.log(stepsToPalindrome("11110000".split("")) === 2); // should be 2.
 console.log(stepsToPalindrome("1000000".split("")) === 1); // should be 1.
+console.log(stepsToPalindrome("101100000".split("")) === 2); // should be 2.
