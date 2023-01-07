@@ -20,7 +20,6 @@
 // brian notes section: How do we tell if a string can't be made into a palindrome? We use the 2 pointer solution like before?
 // Idk. Maybe lets just try coding it.
 
-// Gonna assume that the binary string is a character array, so we can swap it in place.
 // O(n^2) time, O(1) space. O(n) time if the string can't become a palindrome, or already is one.
 function stepsToPalindrome(binaryString) {
   let zeroCount = 0,
@@ -46,30 +45,47 @@ function stepsToPalindrome(binaryString) {
   let left = 0;
   let right = binaryString.length - 1;
   let k = right - 1;
+  let j = left + 1;
   let steps = 0;
 
   while (left < right) {
     if (binaryString[left] !== binaryString[right]) {
       k = right - 1;
-      while (k !== left) {
-        if (binaryString[k] === binaryString[left]) {
-          break;
-        }
-        --k;
-      }
-      if (k === left) {
+      j = left + 1;
+      const swapIndex = findSwapIndex(binaryString, k, j, left);
+      if (swapIndex >= 0) {
         ++steps;
-        ++left;
-        continue;
+        swap(binaryString, swapIndex, right);
       } else {
-        steps++;
-        swap(binaryString, k, right);
+        ++left;
+        ++steps;
+        continue;
       }
     }
     ++left;
     --right;
   }
+  console.log(binaryString.join(""));
   return steps;
+}
+
+function findSwapIndex(binaryString, k, j, left) {
+  while (j < k) {
+    if (binaryString[j] !== binaryString[k]) {
+      if (binaryString[j] === binaryString[left]) {
+        return j;
+      }
+      if (binaryString[k] === binaryString[left]) {
+        return k;
+      }
+    }
+    --k;
+    ++j;
+  }
+  if (k === j) {
+    return k;
+  }
+  return -1;
 }
 
 function swap(binaryString, index1, index2) {
@@ -79,7 +95,11 @@ function swap(binaryString, index1, index2) {
 }
 
 console.log(stepsToPalindrome("0100101".split("")) === 2); // should be 2.
-console.log(stepsToPalindrome("010001101".split("")) === 3); // should be 3.
+console.log(stepsToPalindrome("010001101".split("")) === 2); // should be 2.
+console.log(stepsToPalindrome("000101101".split("")) === 1); // should be 1.
+console.log(stepsToPalindrome("010000000001010".split("")) === 1); // should be 1.
+console.log(stepsToPalindrome("00001".split("")) === 1); // should be 1.
+console.log(stepsToPalindrome("11100".split("")) === 1); // should be 1.
 console.log(stepsToPalindrome("01".split("")) === -1); // should be -1.
 console.log(stepsToPalindrome("111".split("")) === 0); // should be 0.
 console.log(stepsToPalindrome("001".split("")) === 1); // should be 1.
