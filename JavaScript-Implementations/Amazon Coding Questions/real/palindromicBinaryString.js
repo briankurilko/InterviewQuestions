@@ -65,7 +65,6 @@ function stepsToPalindrome(binaryString) {
     ++left;
     --right;
   }
-  console.log(binaryString.join(""));
   return steps;
 }
 
@@ -82,10 +81,7 @@ function findSwapIndex(binaryString, k, j, left) {
     --k;
     ++j;
   }
-  if (k === j) {
-    return k;
-  }
-  return -1;
+  return k;
 }
 
 function swap(binaryString, index1, index2) {
