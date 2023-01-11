@@ -6,7 +6,7 @@
  */
 
 // O(n log n) time, O(n) space. Could do O(n^2) time, O(1) space, as well.
-var twoSum = function (nums, target) {
+const twoSumSorted = function (nums, target) {
   const indexMap = new Map();
   for (let i = 0; i < nums.length; ++i) {
     if (indexMap.has(nums[i])) {
@@ -37,7 +37,27 @@ var twoSum = function (nums, target) {
   return [];
 };
 
-console.log(twoSum([3, 2, 4], 6)); // should be [1, 2]
-console.log(twoSum([2, 7, 11, 15], 9)); // should be [0, 1]
-console.log(twoSum([3, 3], 6)); // should be [0, 1]
-console.log(twoSum([3, 2, 3], 6)); // should be [0, 2]
+const twoSumOptimized = (nums, target) => {
+  const map = new Map();
+
+  for (let i = 0; i < nums.length; ++i) {
+    const complement = target - nums[i];
+    if (map.has(complement)) {
+      return [map.get(complement), i]
+    }
+    map.set(nums[i], i);
+  }
+  return [];
+}
+
+
+
+console.log(twoSumSorted([3, 2, 4], 6)); // should be [1, 2]
+console.log(twoSumSorted([2, 7, 11, 15], 9)); // should be [0, 1]
+console.log(twoSumSorted([3, 3], 6)); // should be [0, 1]
+console.log(twoSumSorted([3, 2, 3], 6)); // should be [0, 2]
+
+console.log(twoSumOptimized([3, 2, 4], 6)); // should be [1, 2]
+console.log(twoSumOptimized([2, 7, 11, 15], 9)); // should be [0, 1]
+console.log(twoSumOptimized([3, 3], 6)); // should be [0, 1]
+console.log(twoSumOptimized([3, 2, 3], 6)); // should be [0, 2]
