@@ -4,15 +4,13 @@
 // Memoize sums?
 // go through the array backwards first? Then add them all together?
 // Alright looked online, it's a stack approach for the O(n) solution.
-// 
+//
 function findTotalPower(power) {
   let i = [power[0]];
-  let distance = 0;
   let offset = 1;
-  let numPermutations = findNumPerms(power.length);
   let powerSum = 0;
   let walkingIndex = 0;
-  while (distance < numPermutations) {
+  while (offset <= power.length) {
     powerSum += min(i) * sum(i);
 
     if (i.length === power.length - offset + 1) {
@@ -23,21 +21,11 @@ function findTotalPower(power) {
       i.push(power[offset + walkingIndex]);
       ++walkingIndex;
     }
-    distance++;
   }
   return powerSum % (Math.pow(10, 9) + 7);
 }
 
-function findNumPerms(number) {
-  let numPerms = 0;
-  for (let i = number; i > 0; --i) {
-    numPerms += i;
-  }
-  return numPerms;
-}
-
 function min(array) {
-  // this can probably be optimized.
   let min = array[0];
   for (let i = 1; i < array.length; ++i) {
     if (min > array[i]) {
@@ -368,7 +356,7 @@ function main() {
     862, 184, 426, 287, 215, 1128, 339, 936, 490, 487, 614, 1014, 348, 1487,
     1132, 889,
   ];
-  //   let power = [1, 3, 1, 2];
+  let power2 = [1, 3, 1, 2];
   // for (let i = 0; i < power.length; i++) {
   //     // const powerItem = parseInt(readLine().trim(), 10);
   //     power.push(powerItem);
