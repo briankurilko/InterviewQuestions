@@ -246,22 +246,22 @@ function helper(binaryString, c) {
   return steps / 2;
 }
 
-// console.log(minSwapsAnotherShot("1101000") === 1); // should be 1. 0101010
-// console.log(minSwapsAnotherShot("1111000") === 2); // should be 2? 1010101. But, it forces a swap of the middle element, unless we can shift...
-// console.log(minSwapsAnotherShot("11110") === -1); // should be -1
-// console.log(minSwapsAnotherShot("01100") === 1); // should be 1.
-// console.log(minSwapsAnotherShot("0110") === 1); // should be 1.
-// console.log(minSwapsAnotherShot("1110") === -1); // should be -1.
-// console.log(minSwapsAnotherShot("1010") === 0); // should be 0.
-// console.log(minSwapsAnotherShot("111000") === 1); // should be 1.
-// console.log(minSwapsAnotherShot("000111") === 1); // should be 1.
-// console.log(minSwapsAnotherShot("010") === 0); // should be 0.
-// console.log(minSwapsAnotherShot("00110011") === 2); // should be 2.
-// console.log(minSwapsAnotherShot("1000101011") === 1); // should be 2.
-// console.log(minSwapsAnotherShot("00110") === 1); // should be 1.
-// console.log(minSwapsAnotherShot("01101") === 1); // should be 1.
+console.log(minSwapsAnotherShot("1101000") === 1); // should be 1. 0101010
+console.log(minSwapsAnotherShot("1111000") === 2); // should be 2? 1010101. But, it forces a swap of the middle element, unless we can shift...
+console.log(minSwapsAnotherShot("11110") === -1); // should be -1
+console.log(minSwapsAnotherShot("01100") === 1); // should be 1.
+console.log(minSwapsAnotherShot("0110") === 1); // should be 1.
+console.log(minSwapsAnotherShot("1110") === -1); // should be -1.
+console.log(minSwapsAnotherShot("1010") === 0); // should be 0.
+console.log(minSwapsAnotherShot("111000") === 1); // should be 1.
+console.log(minSwapsAnotherShot("000111") === 1); // should be 1.
+console.log(minSwapsAnotherShot("010") === 0); // should be 0.
+console.log(minSwapsAnotherShot("00110011") === 2); // should be 2.
+console.log(minSwapsAnotherShot("1000101011") === 1); // should be 2.
+console.log(minSwapsAnotherShot("00110") === 1); // should be 1.
+console.log(minSwapsAnotherShot("01101") === 1); // should be 1.
 console.log(
   minSwapsAnotherShot(
     "101111001000101101111100111011100010010000001010010001100010100001111111100111111010001011001010010110111100101100011110010100101110100110101100000000000000010100001011100011110100001111001110101001101100010111001110011001111011100001001110110011101010011111001010001001110001000111001"
   ) === 80
-); // should be 60.
+);
