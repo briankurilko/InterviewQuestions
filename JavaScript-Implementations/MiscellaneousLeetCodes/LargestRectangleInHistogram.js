@@ -59,7 +59,7 @@ function largestRectangleAreaSlightlyOptimized(heights) {
 
 // O(n log n) time! O(n) space, due to the recursion stack frames.
 // Its n because we need to find the min element, and log n because of our binary search type thing.
-// This is a dum
+// REMEMBER - base case in these 2 pointer ones is l > r, BASICALLY ALWAYS. At least with recursion. If it's a while loop, its while (l < r).
 function largestRectangleDivideAndConquer(
   heights,
   l = 0,
