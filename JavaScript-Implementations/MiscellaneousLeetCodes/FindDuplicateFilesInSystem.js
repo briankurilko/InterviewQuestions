@@ -14,8 +14,8 @@ function findDuplicatesGraph(paths) {
   return duplicateFilesList;
 }
 
-function searchPath(directory, path, mapOfContent) {
-  if (directory == undefined) {
+function searchPath(directory, path, mapOfContent, visited = new Set()) {
+  if (directory == undefined || visited.has(path)) {
     return;
   }
   for (let file of directory.files) {
@@ -31,6 +31,7 @@ function searchPath(directory, path, mapOfContent) {
   for (let subDirectory of [...directory.children.values()]) {
     searchPath(subDirectory, path + "/" + subDirectory.name, mapOfContent);
   }
+  visited.add(path);
 }
 
 class File {
@@ -56,10 +57,9 @@ class Directory {
   }
 }
 
-// ["root/a 1.txt(abcd) 2.txt(efgh)","root/c 3.txt(abcd)","root/c/d 4.txt(efgh)","root 4.txt(efgh)"]
 class Graph {
   constructor(paths) {
-    this.nodes = new Map(); // this map will be flat...
+    this.nodes = new Map();
 
     for (let path of paths) {
       const splitString = path.split(" ");
@@ -82,7 +82,6 @@ class Graph {
         } else {
           const newDirectory = new Directory(directories[i]);
           currentDirectory.addSubDirectory(directories[i], newDirectory);
-          //   this.nodes.set(directories[i], newDirectory);
           currentDirectory = newDirectory;
         }
       }
