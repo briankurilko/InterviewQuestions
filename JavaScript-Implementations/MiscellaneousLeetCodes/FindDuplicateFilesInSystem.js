@@ -1,4 +1,4 @@
-function findDuplicatesAdjacencyList(paths) {
+function findDuplicatesGraph(paths) {
   const graph = new Graph(paths);
   const mapOfContent = new Map();
   for (let directory of [...graph.nodes.values()]) {
@@ -62,15 +62,11 @@ class Graph {
     this.nodes = new Map(); // this map will be flat...
 
     for (let path of paths) {
-      const directories = path.substring(0, path.indexOf(" ")).split("/");
-      const filesAndContent = path
-        .substring(path.indexOf(" ") + 1)
-        .split("/")
-        .join("")
-        .split(" ");
+      const splitString = path.split(" ");
+      const directories = splitString[0].split("/");
       const files = [];
-      for (let fileAndContent of filesAndContent) {
-        const split = fileAndContent.split("(");
+      for (let i = 1; i < splitString.length; ++i) {
+        const split = splitString[i].split("(");
         const fileName = split[0];
         const content = split[1];
         files.push(new File(fileName, content));
@@ -98,7 +94,7 @@ class Graph {
 // Wow, alright, great. This works. Leetcode accepted this answer. Took about 1 hour and 10 minutes.
 // There has to be a million ways to optimize this solution alone.
 console.log(
-  findDuplicatesAdjacencyList([
+  findDuplicatesGraph([
     "root/a 1.txt(abcd) 2.txt(efgh)",
     "root/c 3.txt(abcd)",
     "root/c/d 4.txt(efgh)",
