@@ -90,10 +90,50 @@ class Graph {
   }
 }
 
+// This is a good solution - I think it's important to remember what you're trying to end up with.
+// In this case, you wanted a map of content to list of files. Next time try to come up with that just through string manipulation.
+function findDuplicatesWithoutGraph(paths) {
+  const contentMap = new Map();
+  for (let path of paths) {
+    const values = path.split(" ");
+    for (let i = 1; i < values.length; ++i) {
+      const fileAndContent = values[i].split("(");
+      if (contentMap.has(fileAndContent[1])) {
+        contentMap.set(
+          fileAndContent[1],
+          contentMap
+            .get(fileAndContent[1])
+            .concat(values[0] + "/" + fileAndContent[0])
+        );
+      } else {
+        contentMap.set(fileAndContent[1], [
+          values[0] + "/" + fileAndContent[0],
+        ]);
+      }
+    }
+  }
+  const list = [];
+  for (let files of [...contentMap.values()]) {
+    if (files.length > 1) {
+      list.push(files);
+    }
+  }
+  return list;
+}
+
 // Wow, alright, great. This works. Leetcode accepted this answer. Took about 1 hour and 10 minutes.
 // There has to be a million ways to optimize this solution alone.
 console.log(
   findDuplicatesGraph([
+    "root/a 1.txt(abcd) 2.txt(efgh)",
+    "root/c 3.txt(abcd)",
+    "root/c/d 4.txt(efgh)",
+    "root 4.txt(efgh)",
+  ])
+);
+
+console.log(
+  findDuplicatesWithoutGraph([
     "root/a 1.txt(abcd) 2.txt(efgh)",
     "root/c 3.txt(abcd)",
     "root/c/d 4.txt(efgh)",
