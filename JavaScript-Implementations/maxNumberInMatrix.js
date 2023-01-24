@@ -102,6 +102,7 @@ function getMax(arr) {
   return max;
 }
 
+// max path for a given row is max(aboveNode, leftNode) + currentNode.
 function findMaxInMatrixOptimizedMemoized(
   matrix,
   rowIndex = matrix.length - 1,
