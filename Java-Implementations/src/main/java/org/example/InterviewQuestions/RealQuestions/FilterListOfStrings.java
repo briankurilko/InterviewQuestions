@@ -1,4 +1,4 @@
-package org.example.InterviewQuestions;
+package org.example.InterviewQuestions.RealQuestions;
 
 import java.util.List;
 import java.util.regex.Matcher;
